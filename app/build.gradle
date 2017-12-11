@@ -33,6 +33,7 @@ dependencies {
     implementation "com.github.kinfoundation:kin-sdk-core-android:1aeee46dbf3a9827a61d6d85669db22f72a0eb6d"
     implementation 'com.squareup.retrofit2:retrofit:2.3.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
+    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.2.0'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
