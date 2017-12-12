@@ -15,8 +15,8 @@ import io.reactivex.Flowable
 class KinOverflowDb {
 
     companion object Api {
-        val KIN_PER_QUESTION_TABLE = "question_kin"
-        val KIN_PER_ANSWER_TABLE = "answer_kin"
+        const val KIN_PER_QUESTION_TABLE = "question_kin"
+        const val KIN_PER_ANSWER_TABLE = "answer_kin"
 
         fun getKinPerQuestionMap(): Flowable<Map<String, Long>> {
             return getKinMap(KIN_PER_QUESTION_TABLE)

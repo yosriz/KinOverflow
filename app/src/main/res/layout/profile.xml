@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:paddingLeft="20dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@android:drawable/sym_def_app_icon"/>
+
+    <TextView
+        android:id="@+id/userid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="15dp"
+        android:inputType="textPersonName"
+        android:text="yosriz" />
+
+    <TextView
+        android:id="@+id/kin_balance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="15dp"
+        android:text="0 KIN"/>
+
+    <!--<TextView-->
+        <!--android:id="@+id/points"-->
+        <!--android:layout_width="86dp"-->
+        <!--android:layout_height="19dp"-->
+        <!--android:gravity="left|center_vertical|start"-->
+        <!--android:text="5034"-->
+        <!--tools:layout_editor_absoluteX="105dp"-->
+        <!--tools:layout_editor_absoluteY="211dp"/>-->
+</LinearLayout>
