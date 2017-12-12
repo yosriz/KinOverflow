@@ -19,7 +19,6 @@ import kin.kinoverflow.R
 import kin.kinoverflow.model.Question
 import kin.kinoverflow.network.KinOverflowDb
 import kin.kinoverflow.network.StackOverflowApi
-import kin.kinoverflow.network.getKinPerQuestionMap
 import kin.kinoverflow.utils.plusAssign
 import java.util.*
 
