@@ -1,4 +1,4 @@
-package kin.kinoverflow.network
+package kin.kinoverflow.model
 
 import com.google.gson.annotations.SerializedName
 
