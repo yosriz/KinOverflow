@@ -9,20 +9,20 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 
-interface StackOverflowApiService {
+internal interface StackOverflowApiService {
 
     @GET("search")
     fun getQuestions(@Query("order") order: String = "desc", @Query("pagesize") pagesize: Int = 20,
                      @Query("sort") sort: String = "activity", @Query("tagged") tags: String,
                      @Query("site") site: String = "stackoverflow", @Query("filter") filter:
-                     String = "withbody"): Single<List<Question>>
+                     String = "withbody"): Single<StackOverflowQuery<Question>>
 
     @GET("questions/{id}/answers")
     fun getAnswers(@Path("id") questionId: Int, @Query("order") order: String = "desc",
                    @Query("pagesize") pagesize: Int = 20, @Query("sort") sort: String = "activity",
                    @Query("site") site: String = "stackoverflow",
-                   @Query("filter") filter: String = "withbody"): Single<List<Answer>>
+                   @Query("filter") filter: String = "withbody"): Single<StackOverflowQuery<Answer>>
 
     @GET("users/{id}/answers")
-    fun getUser(@Path("id") id: Int, @Query("site") site: String = "stackoverflow"): Single<User>
+    fun getUser(@Path("id") id: Int, @Query("site") site: String = "stackoverflow"): Single<StackOverflowQuery<User>>
 }
