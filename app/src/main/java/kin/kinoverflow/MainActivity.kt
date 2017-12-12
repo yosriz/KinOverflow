@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity() {
             when (item.itemId) {
                 R.id.navigation_profile -> {
                     screenHolder.removeAllViews()
-                    screenHolder.addView(questionsScreen)
+                    //screenHolder.addView(questionsScreen)
                 }
                 R.id.navigation_questions -> {
                     screenHolder.removeAllViews()

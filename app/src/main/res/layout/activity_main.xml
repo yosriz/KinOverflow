@@ -8,7 +8,7 @@
 
     <FrameLayout
         android:id="@+id/screen_holder"
-        android:layout_width="400dp"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
         app:layout_constraintEnd_toEndOf="parent"

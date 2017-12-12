@@ -11,10 +11,15 @@ import android.widget.Toast
 import butterknife.BindView
 import butterknife.ButterKnife
 import com.jakewharton.rxbinding2.support.v4.widget.RxSwipeRefreshLayout
+import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.functions.BiFunction
 import kin.kinoverflow.R
+import kin.kinoverflow.model.Question
+import kin.kinoverflow.network.KinOverflowDb
 import kin.kinoverflow.network.StackOverflowApi
+import kin.kinoverflow.network.getKinPerQuestionMap
 import kin.kinoverflow.utils.plusAssign
 import java.util.*
 
@@ -39,19 +44,26 @@ class QuestionsScreen @JvmOverloads constructor(
 
         disposables += RxSwipeRefreshLayout.refreshes(pullToRefresh)
                 .startWith(Any())
-                .switchMapSingle { stackOverflowApi.getLastQuestions() }
-                .doOnNext { Log.d("yossi", "got questions = $it.size()") }
+                .switchMap {
+                    Observable.zip(
+                            stackOverflowApi.getLastQuestions().toObservable(),
+                            KinOverflowDb.getKinPerQuestionMap().toObservable(),
+                            BiFunction { list: List<Question>, map: Map<String, Long> -> Pair(list, map) }
+                    )
+                }
+                .onErrorReturn { Pair(Collections.emptyList(), Collections.emptyMap()) }
+                .doOnNext { Log.d("yossi", "got questions = ${it.first.size}") }
                 .doOnError { it.printStackTrace() }
-                .onErrorReturn { Collections.emptyList() }
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe { pullToRefresh.isRefreshing = true }
-                .subscribe { questions ->
+                .subscribe { pair ->
                     pullToRefresh.isRefreshing = false
-                    if (questions.isEmpty()) {
+                    if (pair.first.isEmpty()) {
                         Toast.makeText(context, "Cannot load questions!", Toast.LENGTH_SHORT).show()
                     }
-                    questionsAdapter.updateQuestions(questions)
+                    questionsAdapter.updateQuestions(pair)
                 }
+
 
     }
 

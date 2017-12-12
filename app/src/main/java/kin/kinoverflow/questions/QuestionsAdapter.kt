@@ -1,6 +1,7 @@
 package kin.kinoverflow.questions
 
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import kin.kinoverflow.R
@@ -9,10 +10,14 @@ import kin.kinoverflow.model.Question
 
 class QuestionsAdapter : RecyclerView.Adapter<QuestionViewHolder>() {
 
-    private var questions: ArrayList<Question> = ArrayList()
+    private val questions: ArrayList<Question> = ArrayList()
+    private val kinMap: HashMap<String, Long> = HashMap()
 
-    fun updateQuestions(questions: List<Question>) {
-        this.questions.addAll(questions)
+    fun updateQuestions(pair: Pair<List<Question>, Map<String, Long>>) {
+        questions.clear()
+        questions.addAll(pair.first)
+        kinMap.clear()
+        kinMap.putAll(pair.second)
         notifyDataSetChanged()
     }
 
@@ -27,7 +32,11 @@ class QuestionsAdapter : RecyclerView.Adapter<QuestionViewHolder>() {
     }
 
     override fun onBindViewHolder(vh: QuestionViewHolder, position: Int) {
-        vh.setQuestion(questions[position])
+        val question = questions[position]
+        Log.d("yossi", "index = $position questionId = ${question.questionId}")
+        val kin = kinMap[question.questionId.toString()]
+
+        vh.setQuestion(question, kin)
     }
 }
 
