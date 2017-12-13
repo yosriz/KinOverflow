@@ -31,16 +31,19 @@ class QuestionsScreen @JvmOverloads constructor(
 
     private val stackOverflowApi: StackOverflowApi = StackOverflowApi()
     private val questionsAdapter: QuestionsAdapter = QuestionsAdapter()
-    private val disposables: CompositeDisposable = CompositeDisposable()
+    private var disposables: CompositeDisposable = CompositeDisposable()
 
-
-    override fun onAttachedToWindow() {
-        super.onAttachedToWindow()
+    init {
         val view = inflate(context, R.layout.fragment_questions, this)
         view?.let { ButterKnife.bind(this, it) }
         recycler.adapter = questionsAdapter
         recycler.layoutManager = LinearLayoutManager(context)
+    }
 
+    override fun onAttachedToWindow() {
+        super.onAttachedToWindow()
+
+        disposables = CompositeDisposable()
         disposables += RxSwipeRefreshLayout.refreshes(pullToRefresh)
                 .startWith(Any())
                 .switchMap {
@@ -62,10 +65,11 @@ class QuestionsScreen @JvmOverloads constructor(
                     }
                     questionsAdapter.updateQuestions(pair)
                 }
-
-
     }
 
+    fun questionClickEvents(): Observable<Question> {
+        return questionsAdapter.clickEvents()
+    }
 
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()

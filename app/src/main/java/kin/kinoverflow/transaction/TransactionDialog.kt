@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.NumberPicker
 import android.widget.ProgressBar
+import android.widget.Toast
 import butterknife.BindView
 import butterknife.ButterKnife
 import io.reactivex.Single
@@ -65,6 +66,26 @@ class TransactionDialog(private val context: Context, private val kinClient: Kin
                     .create()
             dialog.show()
         }
+    }
+
+    fun useExample() {
+        kinClient?.let { it1 ->
+            val dialog = TransactionDialog(context, it1)
+            kinClient?.account?.let {
+                dialog.showTransactionDialog(it.publicAddress)
+                        .subscribe { status ->
+                            when (status) {
+                                is TransactionDialog.TransactionCancelled ->
+                                    Toast.makeText(context, "Transaction Cancelled", Toast.LENGTH_SHORT).show()
+                                is TransactionDialog.TransactionFailed ->
+                                    Toast.makeText(context, "Transaction FAILED", Toast.LENGTH_SHORT).show()
+                                is TransactionDialog.TransactionSucceed ->
+                                    Toast.makeText(context, "Transaction SUCCEED, with ${status.kin} Kin", Toast.LENGTH_SHORT).show()
+                            }
+                        }
+            }
+        }
+
     }
 
 }

@@ -4,6 +4,8 @@ import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import io.reactivex.Observable
+import io.reactivex.subjects.PublishSubject
 import kin.kinoverflow.R
 import kin.kinoverflow.model.Question
 
@@ -12,6 +14,7 @@ class QuestionsAdapter : RecyclerView.Adapter<QuestionViewHolder>() {
 
     private val questions: ArrayList<Question> = ArrayList()
     private val kinMap: HashMap<String, Long> = HashMap()
+    private val subject: PublishSubject<Question> = PublishSubject.create()
 
     fun updateQuestions(pair: Pair<List<Question>, Map<String, Long>>) {
         questions.clear()
@@ -26,9 +29,15 @@ class QuestionsAdapter : RecyclerView.Adapter<QuestionViewHolder>() {
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QuestionViewHolder {
-        return QuestionViewHolder(LayoutInflater.from(parent.context)
+        val view = QuestionViewHolder(LayoutInflater.from(parent.context)
                 .inflate(R.layout.question_view_holder, parent, false)
         )
+        view.listener = object : ViewHolderClickListener {
+            override fun onClick(adapterPosition: Int) {
+                subject.onNext(questions[adapterPosition])
+            }
+        }
+        return view
     }
 
     override fun onBindViewHolder(vh: QuestionViewHolder, position: Int) {
@@ -37,6 +46,10 @@ class QuestionsAdapter : RecyclerView.Adapter<QuestionViewHolder>() {
         val kin = kinMap[question.questionId.toString()]
 
         vh.setQuestion(question, kin)
+    }
+
+    fun clickEvents(): Observable<Question> {
+        return subject.hide()
     }
 }
 

@@ -5,6 +5,7 @@ import android.view.View
 import android.widget.TextView
 import butterknife.BindView
 import butterknife.ButterKnife
+import io.reactivex.subjects.PublishSubject
 import kin.kinoverflow.R
 import kin.kinoverflow.model.Question
 
@@ -16,9 +17,15 @@ class QuestionViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     @BindView(R.id.tv_votes_counter) lateinit var votesCounter: TextView
     @BindView(R.id.tv_kin) lateinit var kinCounter: TextView
 
+
     init {
         ButterKnife.bind(this, itemView)
+        itemView.setOnClickListener {
+            listener?.onClick(adapterPosition)
+        }
     }
+
+    var listener: ViewHolderClickListener? = null
 
     fun setQuestion(question: Question, kin: Long?) {
         date.text = question.creationDate.toString()
@@ -29,4 +36,9 @@ class QuestionViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         votesCounter.text = (question.upVoteCount - question.downVoteCount).toString()
         kin?.let { kinCounter.text = it.toString() }
     }
+
+}
+
+interface ViewHolderClickListener {
+    fun onClick(adapterPosition: Int)
 }

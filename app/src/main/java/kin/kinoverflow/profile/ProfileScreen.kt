@@ -5,9 +5,13 @@ import android.support.constraint.ConstraintLayout
 import android.util.AttributeSet
 import android.widget.FrameLayout
 import android.widget.TextView
+import android.widget.Toast
 import butterknife.BindView
 import butterknife.ButterKnife
+import io.reactivex.disposables.CompositeDisposable
+import kin.kinoverflow.PASSPHRASE
 import kin.kinoverflow.R
+import kin.kinoverflow.transaction.TransactionDialog
 import kin.sdk.core.Balance
 import kin.sdk.core.KinClient
 import kin.sdk.core.Request
@@ -26,19 +30,21 @@ class ProfileScreen @JvmOverloads constructor(
         super.onAttachedToWindow()
         val view = FrameLayout.inflate(context, R.layout.profile, this)
         view?.let { ButterKnife.bind(this, it) }
-        view.setOnClickListener { refreshBalanceText() }
+        view.setOnClickListener {
+            refreshBalanceText()
+        }
     }
 
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
-        if (request!=null) {
+        if (request != null) {
             request?.cancel(true)
             request = null
         }
     }
 
-    private fun refreshBalanceText(){
-        if (kinClient != null){
+    private fun refreshBalanceText() {
+        if (kinClient != null) {
             request = kinClient?.account?.balance
             request?.run(object : ResultCallback<Balance> {
                 override fun onResult(balance: Balance) {

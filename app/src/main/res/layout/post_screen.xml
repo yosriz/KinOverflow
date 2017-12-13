@@ -1,0 +1,153 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/tv_tags"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/up_vote"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="RxJava2 Flowable.combineLatest behavior if all Flowables don't emit" />
+
+        <TextView
+            android:id="@+id/tv_votes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="@id/up_vote"
+            app:layout_constraintStart_toStartOf="@+id/up_vote"
+            app:layout_constraintTop_toBottomOf="@+id/up_vote"
+            tools:text="342" />
+
+        <ImageView
+            android:id="@+id/up_vote"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:src="@android:drawable/arrow_up_float"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/down_vote"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:src="@android:drawable/arrow_down_float"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_votes" />
+
+        <TextView
+            android:id="@+id/tv_kin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="13Kin"
+            app:layout_constraintEnd_toStartOf="@id/tv_title"
+            app:layout_constraintTop_toBottomOf="@+id/down_vote"
+            app:layout_constraintStart_toStartOf="parent"/>
+        <TextView
+            android:id="@+id/tv_tags"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginStart="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/down_vote"
+            app:layout_constraintStart_toEndOf="@+id/down_vote"
+            tools:text="rx-java, rx-android, rx-java2" />
+
+        <View
+            android:id="@+id/separator_header"
+            android:layout_width="wrap_content"
+            android:layout_height="1dp"
+            android:layout_marginTop="14dp"
+
+            android:background="#abcdef"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_kin" />
+
+        <TextView
+            android:id="@+id/tv_question_body"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/separator_header"
+            tools:text="@string/question_body" />
+
+        <TextView
+            android:id="@+id/tv_asked_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@id/tv_question_body"
+            tools:text="Asked 10 Hours ago" />
+
+        <View
+            android:id="@+id/profile_area"
+            android:layout_width="160dp"
+            android:layout_height="55dp"
+            android:layout_marginTop="8dp"
+            android:background="#7db2d1"
+            app:layout_constraintTop_toBottomOf="@id/tv_asked_date" />
+
+        <ImageView
+            android:id="@+id/profile_image"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginStart="10dp"
+            app:layout_constraintBottom_toBottomOf="@id/profile_area"
+            app:layout_constraintStart_toStartOf="@id/profile_area"
+            app:layout_constraintTop_toTopOf="@id/profile_area"
+            tools:src="@android:drawable/ic_dialog_email" />
+
+        <TextView
+            android:id="@+id/tv_user_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            app:layout_constraintStart_toEndOf="@+id/profile_image"
+            app:layout_constraintTop_toTopOf="@+id/profile_image"
+            tools:text="yosriz" />
+
+        <TextView
+            android:id="@+id/tv_badges_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/profile_area"
+            app:layout_constraintStart_toEndOf="@+id/profile_image"
+            tools:text="1 &#8901; 2 &#8901; 4" />
+
+        <View
+            android:id="@+id/separator_answer"
+            android:layout_width="wrap_content"
+            android:layout_height="1dp"
+            android:layout_marginTop="8dp"
+            android:background="#abcdef"
+            app:layout_constraintTop_toBottomOf="@id/profile_area" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_answers"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@+id/separator_answer" />
+    </android.support.constraint.ConstraintLayout>
+</ScrollView>

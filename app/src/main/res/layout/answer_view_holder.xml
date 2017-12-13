@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/tv_answer"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/up_vote"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@string/question_body" />
+
+    <TextView
+        android:id="@+id/tv_votes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="@id/up_vote"
+        app:layout_constraintStart_toStartOf="@+id/up_vote"
+        app:layout_constraintTop_toBottomOf="@+id/up_vote"
+        tools:text="342" />
+
+    <ImageView
+        android:id="@+id/up_vote"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:src="@android:drawable/arrow_up_float"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/down_vote"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:src="@android:drawable/arrow_down_float"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_votes" />
+
+    <ImageView
+        android:id="@+id/accepted_answer"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        app:layout_constraintEnd_toEndOf="@+id/down_vote"
+        app:layout_constraintStart_toStartOf="@+id/down_vote"
+        app:layout_constraintTop_toBottomOf="@+id/down_vote"
+        tools:src="@android:drawable/sym_action_call" />
+
+    <TextView
+        android:id="@+id/tv_kin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        app:layout_constraintEnd_toEndOf="@+id/accepted_answer"
+        app:layout_constraintStart_toStartOf="@+id/accepted_answer"
+        app:layout_constraintTop_toBottomOf="@id/accepted_answer"
+        tools:text="13" />
+
+    <TextView
+        android:id="@+id/tv_asked_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="@id/tv_answer"
+        app:layout_constraintTop_toBottomOf="@id/tv_answer"
+        tools:text="Answered 10 Hours ago" />
+
+    <View
+        android:id="@+id/profile_area"
+        android:layout_width="160dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="6dp"
+        android:background="#7db2d1"
+        app:layout_constraintStart_toStartOf="@id/tv_answer"
+        app:layout_constraintTop_toBottomOf="@id/tv_asked_date" />
+
+    <ImageView
+        android:id="@+id/profile_image"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginStart="10dp"
+        app:layout_constraintBottom_toBottomOf="@id/profile_area"
+        app:layout_constraintStart_toStartOf="@id/profile_area"
+        app:layout_constraintTop_toTopOf="@id/profile_area"
+        tools:src="@android:drawable/ic_dialog_email" />
+
+    <TextView
+        android:id="@+id/tv_user_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        app:layout_constraintStart_toEndOf="@+id/profile_image"
+        app:layout_constraintTop_toTopOf="@+id/profile_image"
+        tools:text="yosriz" />
+
+    <TextView
+        android:id="@+id/tv_badges_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/profile_area"
+        app:layout_constraintStart_toEndOf="@+id/profile_image"
+        tools:text="1 &#8901; 2 &#8901; 4" />
+
+    <View
+        android:id="@+id/separator"
+        android:layout_width="match_parent"
+        android:layout_height="32dp"
+        android:layout_marginTop="8dp"
+        android:background="#c7c7ca"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/profile_area" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="3dp"
+        android:layout_marginTop="3dp"
+        android:text="Add Comment"
+        app:layout_constraintBottom_toBottomOf="@id/separator"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/separator" />
+
+
+</android.support.constraint.ConstraintLayout>

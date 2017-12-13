@@ -7,13 +7,14 @@ import android.view.ViewGroup
 import butterknife.BindView
 import butterknife.ButterKnife
 import kin.kinoverflow.network.AwardServiceMock
+import kin.kinoverflow.post.PostScreen
 import kin.kinoverflow.profile.ProfileScreen
 import kin.kinoverflow.questions.QuestionsScreen
 import kin.sdk.core.KinClient
 import kin.sdk.core.ServiceProvider
 import kin.sdk.core.exception.EthereumClientException
 
-private const val PASSPHRASE = "1234"
+const val PASSPHRASE = "1234"
 private const val ROPSTEN_TEST_NET_URL = "http://parity.rounds.video:8545"
 
 class MainActivity : AppCompatActivity() {
@@ -36,6 +37,9 @@ class MainActivity : AppCompatActivity() {
 
         ButterKnife.bind(this)
 
+        screenHolder.removeAllViews()
+        screenHolder.addView(questionsScreen)
+
         bottomNavigation.setOnNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.navigation_profile -> {
@@ -43,12 +47,22 @@ class MainActivity : AppCompatActivity() {
                     screenHolder.addView(profileScreen)
                 }
                 R.id.navigation_questions -> {
-                    screenHolder.removeAllViews()
-                    screenHolder.addView(questionsScreen)
+                    setQuestionScreen()
                 }
             }
             return@setOnNavigationItemSelectedListener true
         }
+        setQuestionScreen()
+    }
+
+    private fun setQuestionScreen() {
+        screenHolder.removeAllViews()
+        screenHolder.addView(questionsScreen)
+        questionsScreen.questionClickEvents()
+                .subscribe { question ->
+                    screenHolder.removeAllViews()
+                    screenHolder.addView(PostScreen(this, question = question))
+                }
     }
 
     private fun initKinClient(): KinClient? {

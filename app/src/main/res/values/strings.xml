@@ -3,4 +3,13 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="pay_to">Pay to %2%s:</string>
+    <string name="question_body">I want to make a layout that lets me scroll down using constraint layout, but I dont know how to go about it. should the scrollview be the parent of the constraintlayout like this?
+Or the other way around? maybe someone can point me to a good tutorial on this or give an example, I cant seem to find one.
+
+Also I dont know if this is a bug or some configuration that I dont have set up but I've seen images like this one where there are some components outside the blueprint "blue rectangle" yet they are visible, while on my side if I place a component on the "white space" I cant see it or move it anywhere,and it appears on the component tree.
+
+UPDATE
+
+I found a way to make the constraint layout scrollable in the design tool, using a horiontal guideline to push down the constraint layout border and extend it beyond the device, after that you can use the guide line as the new bottom of the constraint layout to anchor the components.</string>
 </resources>
