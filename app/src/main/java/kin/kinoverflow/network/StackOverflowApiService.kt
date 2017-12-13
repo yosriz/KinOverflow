@@ -23,6 +23,6 @@ internal interface StackOverflowApiService {
                    @Query("site") site: String = "stackoverflow",
                    @Query("filter") filter: String = "withbody"): Single<StackOverflowQuery<Answer>>
 
-    @GET("users/{id}/answers")
+    @GET("users/{id}")
     fun getUser(@Path("id") id: Int, @Query("site") site: String = "stackoverflow"): Single<StackOverflowQuery<User>>
 }

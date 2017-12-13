@@ -7,9 +7,11 @@ import android.view.ViewGroup
 import butterknife.BindView
 import butterknife.ButterKnife
 import kin.kinoverflow.network.AwardServiceMock
+import kin.kinoverflow.network.KinOverflowDb
 import kin.kinoverflow.post.PostScreen
 import kin.kinoverflow.profile.ProfileScreen
 import kin.kinoverflow.questions.QuestionsScreen
+import kin.kinoverflow.user.UserManager
 import kin.sdk.core.KinClient
 import kin.sdk.core.ServiceProvider
 import kin.sdk.core.exception.EthereumClientException
@@ -19,20 +21,29 @@ private const val ROPSTEN_TEST_NET_URL = "http://parity.rounds.video:8545"
 
 class MainActivity : AppCompatActivity() {
 
-
     @BindView(R.id.bottom_navigation) lateinit var bottomNavigation: BottomNavigationView
     @BindView(R.id.screen_holder) lateinit var screenHolder: ViewGroup
     private lateinit var questionsScreen: QuestionsScreen
     private lateinit var profileScreen: ProfileScreen
+    private lateinit var userManger: UserManager
+
+    private var kinClient: KinClient? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        var kinClient: KinClient? = initKinClient()
+        kinClient = initKinClient()
+        userManger = UserManager(this)
+        userManger.getUser()
+                .doOnSuccess { user ->
+                    kinClient?.account?.let {
+                        KinOverflowDb.setAddressToUser(user.userId.toString(), it.publicAddress)
+                    }
+                }.subscribe()
 
         questionsScreen = QuestionsScreen(this)
-        profileScreen = ProfileScreen(this)
+        profileScreen = ProfileScreen(this, userManger = userManger)
         profileScreen.kinClient = kinClient
 
         ButterKnife.bind(this)

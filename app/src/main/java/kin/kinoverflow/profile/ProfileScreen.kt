@@ -12,6 +12,7 @@ import io.reactivex.disposables.CompositeDisposable
 import kin.kinoverflow.PASSPHRASE
 import kin.kinoverflow.R
 import kin.kinoverflow.transaction.TransactionDialog
+import kin.kinoverflow.user.UserManager
 import kin.sdk.core.Balance
 import kin.sdk.core.KinClient
 import kin.sdk.core.Request
@@ -19,20 +20,28 @@ import kin.sdk.core.ResultCallback
 
 
 class ProfileScreen @JvmOverloads constructor(
-        context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
+        context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0, private val userManger: UserManager = UserManager(context)
 ) : ConstraintLayout(context, attrs, defStyleAttr) {
 
     @BindView(R.id.kin_balance) lateinit var kinBalance: TextView
     var kinClient: KinClient? = null
     private var request: Request<Balance>? = null
 
-    override fun onAttachedToWindow() {
-        super.onAttachedToWindow()
+    init {
         val view = FrameLayout.inflate(context, R.layout.profile, this)
         view?.let { ButterKnife.bind(this, it) }
         view.setOnClickListener {
             refreshBalanceText()
         }
+    }
+
+    override fun onAttachedToWindow() {
+        super.onAttachedToWindow()
+
+        userManger.getUser()
+                .subscribe {
+                    user -> //update user details
+                }
     }
 
     override fun onDetachedFromWindow() {

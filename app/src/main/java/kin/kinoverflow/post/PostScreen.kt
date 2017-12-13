@@ -9,6 +9,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import butterknife.BindView
 import butterknife.ButterKnife
+import butterknife.OnClick
 import com.squareup.picasso.Picasso
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -35,7 +36,6 @@ class PostScreen @JvmOverloads constructor(
     @BindView(R.id.tv_user_name) lateinit var questionProfileName: TextView
     @BindView(R.id.tv_badges_count) lateinit var questionProfileBadgesCount: TextView
     @BindView(R.id.tv_kin) lateinit var questionKin: TextView
-
 
     private val stackOverflowApi: StackOverflowApi = StackOverflowApi()
     private val answersAdapter: AnswersAdapter = AnswersAdapter()
@@ -82,6 +82,11 @@ class PostScreen @JvmOverloads constructor(
                     .load(question.owner.profileImage)
                     .into(questionProfileImage)
         }
+    }
+
+    @OnClick(R.id.sponsor)
+    fun onSponsorClick(){
+        //KinOverflowDb.
     }
 
 

@@ -17,6 +17,7 @@ class KinOverflowDb {
     companion object Api {
         const val KIN_PER_QUESTION_TABLE = "question_kin"
         const val KIN_PER_ANSWER_TABLE = "answer_kin"
+        const val USERS_ADDRESSES = "users_addresses"
 
         fun getKinPerQuestionMap(): Flowable<Map<String, Long>> {
             return getKinMap(KIN_PER_QUESTION_TABLE)
@@ -24,6 +25,10 @@ class KinOverflowDb {
 
         fun getKinPerAnswerMap(): Flowable<Map<String, Long>> {
             return getKinMap(KIN_PER_ANSWER_TABLE)
+        }
+
+        fun getUsersAddressMap(): Flowable<Map<String, Long>> {
+            return getKinMap(USERS_ADDRESSES)
         }
 
         private fun getKinMap(fromTable: String): Flowable<Map<String, Long>> {
@@ -37,6 +42,11 @@ class KinOverflowDb {
 
         fun setKinToAnswer(answerId: String, kinValue: Long) {
             setKin(KIN_PER_ANSWER_TABLE, answerId, kinValue)
+        }
+
+        fun setAddressToUser(userId: String, address: String) {
+            val kinDb = FirebaseDatabase.getInstance().getReference(USERS_ADDRESSES)
+            kinDb.child(userId).setValue(address)
         }
 
         private fun setKin(table: String, id: String, kinValue: Long) {

@@ -12,4 +12,5 @@ Also I dont know if this is a bug or some configuration that I dont have set up 
 UPDATE
 
 I found a way to make the constraint layout scrollable in the design tool, using a horiontal guideline to push down the constraint layout border and extend it beyond the device, after that you can use the guide line as the new bottom of the constraint layout to anchor the components.</string>
+    <string name="title_activity_settings">SettingsActivity</string>
 </resources>
