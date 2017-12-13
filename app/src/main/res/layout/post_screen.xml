@@ -11,7 +11,7 @@
         <TextView
             android:id="@+id/tv_title"
             android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
@@ -53,20 +53,31 @@
             app:layout_constraintTop_toBottomOf="@+id/tv_votes" />
 
         <TextView
+            android:id="@+id/sponsor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sponsor"
+            app:layout_constraintEnd_toStartOf="@id/tv_title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/down_vote" />
+
+        <TextView
             android:id="@+id/tv_kin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:text="13Kin"
+            android:layout_marginTop="8dp"
             app:layout_constraintEnd_toStartOf="@id/tv_title"
-            app:layout_constraintTop_toBottomOf="@+id/down_vote"
-            app:layout_constraintStart_toStartOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/sponsor"
+            tools:text="13Kin" />
+
         <TextView
             android:id="@+id/tv_tags"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:layout_marginStart="8dp"
-            app:layout_constraintBottom_toBottomOf="@+id/down_vote"
+            app:layout_constraintTop_toBottomOf="@id/tv_title"
             app:layout_constraintStart_toEndOf="@+id/down_vote"
             tools:text="rx-java, rx-android, rx-java2" />
 

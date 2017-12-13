@@ -64,7 +64,7 @@ class PostScreen @JvmOverloads constructor(
                 .subscribe { triple ->
                     answersAdapter.updateAnswers(triple.first, triple.third)
                     val kin = triple.second[question.questionId.toString()]
-                    questionKin.text = kin.toString()
+                    kin?.let { questionKin.text = it.toString() }
                 }
     }
 
