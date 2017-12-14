@@ -45,12 +45,14 @@ class QuestionsScreen @JvmOverloads constructor(
         view?.let { ButterKnife.bind(this, it) }
         recycler.adapter = questionsAdapter
         recycler.layoutManager = LinearLayoutManager(context)
+        questionsObservable = stackOverflowApi.getLastQuestions().toObservable()
+                .cache()
     }
 
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
 
-        questionsObservable = stackOverflowApi.getLastQuestions().toObservable().cache()
+
         disposables = CompositeDisposable()
         disposables += RxSwipeRefreshLayout.refreshes(pullToRefresh)
                 .startWith(Any())
