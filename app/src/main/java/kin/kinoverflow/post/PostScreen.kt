@@ -5,6 +5,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.text.format.DateUtils
 import android.util.AttributeSet
+import android.view.View
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
@@ -48,6 +49,8 @@ class PostScreen @JvmOverloads constructor(
     @BindView(R.id.tv_user_name) lateinit var questionProfileName: TextView
     @BindView(R.id.tv_badges_count) lateinit var questionProfileBadgesCount: TextView
     @BindView(R.id.tv_kin) lateinit var questionKin: TextView
+    @BindView(R.id.kin_icon) lateinit var kinIcon: View
+    @BindView(R.id.rectangle_kin) lateinit var kinRect: View
 
     private val stackOverflowApi: StackOverflowApi = StackOverflowApi()
     private val answersAdapter: AnswersAdapter = AnswersAdapter()
@@ -86,7 +89,17 @@ class PostScreen @JvmOverloads constructor(
                     }
                     answersAdapter.updateAnswers(answers, triple.third)
                     val kin = triple.second[question.questionId.toString()]
-                    kin?.let { questionKin.text = it.toString() }
+
+                    if (kin != null) {
+                        questionKin.text = kin.toString()
+                        questionKin.visibility = View.VISIBLE
+                        kinIcon.visibility = View.VISIBLE
+                        kinRect.visibility = View.VISIBLE
+                    } else {
+                        questionKin.visibility = View.INVISIBLE
+                        kinIcon.visibility = View.INVISIBLE
+                        kinRect.visibility = View.INVISIBLE
+                    }
                 }
 
         answersAdapter.answerClickEvents()
@@ -161,6 +174,9 @@ class PostScreen @JvmOverloads constructor(
                             Toast.makeText(context, "Payment done successfully", Toast.LENGTH_SHORT).show()
                             KinOverflowDb.setKinToQuestion(question.questionId.toString(), status.kin)
                             questionKin.text = status.kin.toString()
+                            questionKin.visibility = View.VISIBLE
+                            kinIcon.visibility = View.VISIBLE
+                            kinRect.visibility = View.VISIBLE
                         }
                     }
                 }

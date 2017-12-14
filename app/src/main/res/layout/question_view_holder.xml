@@ -74,12 +74,13 @@
         android:id="@+id/tv_kin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="3dp"
         android:layout_marginEnd="1dp"
+        android:layout_marginStart="3dp"
         android:textColor="@color/colorPrimary"
         app:layout_constraintBottom_toBottomOf="@+id/rectangle_kin"
-        app:layout_constraintStart_toStartOf="@+id/rectangle_kin"
         app:layout_constraintEnd_toStartOf="@id/kin_icon"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintStart_toStartOf="@+id/rectangle_kin"
         app:layout_constraintTop_toTopOf="@id/rectangle_kin"
         tools:text="50" />
 
