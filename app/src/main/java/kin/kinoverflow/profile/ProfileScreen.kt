@@ -31,15 +31,13 @@ class ProfileScreen @JvmOverloads constructor(
     @BindView(R.id.prof_user_id) lateinit var userId: TextView
     @BindView(R.id.prof_reputation) lateinit var reputation: TextView
 
+    lateinit var initialBalance: String
     var kinClient: KinClient? = null
     private var request: Request<Balance>? = null
 
     init {
         val view = FrameLayout.inflate(context, R.layout.profile, this)
         view?.let { ButterKnife.bind(this, it) }
-        view.setOnClickListener {
-            refreshBalanceText()
-        }
     }
 
     override fun onAttachedToWindow() {
@@ -49,6 +47,11 @@ class ProfileScreen @JvmOverloads constructor(
                 .subscribe {
                     user -> updateUserDetails(user)
                 }
+        kinBalance.text = initialBalance
+        refreshBalanceText()
+        kinBalance.setOnClickListener {
+            refreshBalanceText()
+        }
     }
 
     private fun updateUserDetails(user: User){
@@ -85,4 +88,5 @@ class ProfileScreen @JvmOverloads constructor(
             })
         }
     }
+
 }

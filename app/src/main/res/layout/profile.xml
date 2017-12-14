@@ -20,7 +20,6 @@
         android:layout_height="32dp"
         android:layout_marginTop="5dp"
         android:textSize="20sp"
-        android:fontFamily=""
         android:text="yosriz"/>
 
     <LinearLayout
@@ -91,8 +90,7 @@
             android:layout_height="wrap_content"
             android:textColor="#005fff"
             android:layout_gravity="center"
-            android:textSize="16sp"
-            android:text="53231"/>
+            android:textSize="16sp"/>
 
         <ImageView
             android:layout_marginLeft="2dp"

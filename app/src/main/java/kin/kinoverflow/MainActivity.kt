@@ -12,7 +12,9 @@ import kin.kinoverflow.post.PostScreen
 import kin.kinoverflow.profile.ProfileScreen
 import kin.kinoverflow.questions.QuestionsScreen
 import kin.kinoverflow.user.UserManager
+import kin.sdk.core.Balance
 import kin.sdk.core.KinClient
+import kin.sdk.core.ResultCallback
 import kin.sdk.core.ServiceProvider
 import kin.sdk.core.exception.EthereumClientException
 
@@ -26,6 +28,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var questionsScreen: QuestionsScreen
     private lateinit var profileScreen: ProfileScreen
     private lateinit var userManger: UserManager
+    private var initialBalance: String = "0"
 
     private var kinClient: KinClient? = null
 
@@ -54,6 +57,7 @@ class MainActivity : AppCompatActivity() {
         bottomNavigation.setOnNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.navigation_profile -> {
+                    profileScreen.initialBalance = initialBalance
                     screenHolder.removeAllViews()
                     screenHolder.addView(profileScreen)
                 }
@@ -97,6 +101,19 @@ class MainActivity : AppCompatActivity() {
             if (!kinClient.hasAccount()) {
                 var account = kinClient.createAccount(PASSPHRASE)
                 AwardServiceMock().awardKin(account.publicAddress)
+                initialBalance = "10000"
+            }
+            else {
+                var request = kinClient.account.pendingBalance
+                request?.run(object : ResultCallback<Balance> {
+                    override fun onResult(balance: Balance) {
+                        initialBalance = balance.value(0)
+                    }
+
+                    override fun onError(e: Exception) {
+                        e.printStackTrace()
+                    }
+                })
             }
 
             return kinClient
