@@ -15,6 +15,8 @@ class SettingsActivity : AppCompatActivity() {
 
 
     @BindView(R.id.edit_user_id) lateinit var userId: EditText
+    @BindView(R.id.edit_faked_user_id) lateinit var fakedUserId: EditText
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,6 +31,7 @@ class SettingsActivity : AppCompatActivity() {
         val sharedPref = getSharedPreferences("settings", Context.MODE_PRIVATE)
         sharedPref.edit()
                 .putInt("user_id", userId.text.toString().toInt())
+                .putInt("faked_user_id", fakedUserId.text.toString().toInt())
                 .apply()
     }
 

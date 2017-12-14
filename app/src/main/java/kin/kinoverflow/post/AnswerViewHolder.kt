@@ -6,10 +6,12 @@ import android.widget.ImageView
 import android.widget.TextView
 import butterknife.BindView
 import butterknife.ButterKnife
+import butterknife.OnClick
 import com.squareup.picasso.Picasso
 import kin.kinoverflow.R
 import kin.kinoverflow.model.Answer
 import kin.kinoverflow.model.Question
+import kin.kinoverflow.questions.ViewHolderClickListener
 
 class AnswerViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
@@ -22,6 +24,8 @@ class AnswerViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     @BindView(R.id.profile_image) lateinit var profileImage: ImageView
     @BindView(R.id.tv_user_name) lateinit var profileName: TextView
     @BindView(R.id.tv_badges_count) lateinit var profileBadgesCount: TextView
+
+    var listener: ViewHolderClickListener? = null
 
     init {
         ButterKnife.bind(this, itemView)
@@ -38,5 +42,10 @@ class AnswerViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                     .load(answer.owner.profileImage)
                     .into(profileImage)
         }
+    }
+
+    @OnClick(R.id.sponsor)
+    fun onSponsorClick(){
+        listener?.onClick(adapterPosition)
     }
 }

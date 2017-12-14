@@ -7,6 +7,7 @@ import android.util.AttributeSet
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.OnClick
@@ -17,13 +18,22 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.Function3
 import kin.kinoverflow.R
 import kin.kinoverflow.model.Answer
+import kin.kinoverflow.model.Owner
 import kin.kinoverflow.model.Question
+import kin.kinoverflow.model.User
 import kin.kinoverflow.network.KinOverflowDb
 import kin.kinoverflow.network.StackOverflowApi
+import kin.kinoverflow.transaction.TransactionDialog
+import kin.kinoverflow.user.UserManager
+import kin.sdk.core.KinClient
 
 
 class PostScreen @JvmOverloads constructor(
-        context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0, private val question: Question = Question()
+        context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0,
+        private val question: Question = Question(),
+        private val answerFakedUser: User?,
+        private val kinClient: KinClient,
+        private val userManager: UserManager
 ) : FrameLayout(context, attrs, defStyleAttr) {
 
     @BindView(R.id.recycler_answers) lateinit var recycler: RecyclerView
@@ -40,6 +50,8 @@ class PostScreen @JvmOverloads constructor(
     private val stackOverflowApi: StackOverflowApi = StackOverflowApi()
     private val answersAdapter: AnswersAdapter = AnswersAdapter()
     private var disposables: CompositeDisposable = CompositeDisposable()
+    private val transactionDialog = TransactionDialog(context, kinClient)
+    private lateinit var answers: List<Answer>
 
     init {
         val view = inflate(context, R.layout.post_screen, this)
@@ -62,9 +74,51 @@ class PostScreen @JvmOverloads constructor(
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe { populateQuestion() }
                 .subscribe { triple ->
-                    answersAdapter.updateAnswers(triple.first, triple.third)
+                    answers = triple.first
+                    if (answerFakedUser != null && !answers.isEmpty()) {
+                        val user = answerFakedUser
+                        val list = ArrayList(answers)
+                        list[0] = answers[0].copy(owner = Owner(reputation = user.reputation, acceptRate = user.acceptRate, displayName = user.displayName,
+                                link = user.link, profileImage = user.profileImage, userId = user.userId, userType = user.userType))
+                        answers = list
+                    }
+                    answersAdapter.updateAnswers(answers, triple.third)
                     val kin = triple.second[question.questionId.toString()]
                     kin?.let { questionKin.text = it.toString() }
+                }
+
+        answersAdapter.answerClickEvents()
+                .flatMapSingle { answer ->
+                    KinOverflowDb.getUsersAddressMap()
+                            .first(HashMap())
+                            .flatMap { map ->
+                                var address = map[answer.owner.userId.toString()]
+                                if (address == null)
+                                    address = "ff2092ebf61aefb0e6f5d4ec208b84b9d9fd2ec9"
+                                transactionDialog.showTransactionDialog(address, answer.owner.displayName)
+                                        .map { status -> Pair(status, answer) }
+                            }
+
+                }
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { pair ->
+                    val status = pair.first
+                    when (status) {
+                        is TransactionDialog.TransactionCancelled ->
+                            Toast.makeText(context, "Pay Kin Operation Cancelled", Toast.LENGTH_SHORT).show()
+                        is TransactionDialog.TransactionFailed ->
+                            Toast.makeText(context, "Failed to pay Kin", Toast.LENGTH_SHORT).show()
+                        is TransactionDialog.TransactionSucceed -> {
+                            Toast.makeText(context, "Payment done successfully", Toast.LENGTH_SHORT).show()
+                            KinOverflowDb.setKinToAnswer(pair.second.answerId.toString(), status.kin)
+                            KinOverflowDb.getKinPerAnswerMap()
+                                    .subscribe { answersMap ->
+                                        val map = HashMap(answersMap)
+                                        map.put(pair.second.answerId.toString(), status.kin)
+                                        answersAdapter.updateAnswers(answers, map)
+                                    }
+                        }
+                    }
                 }
     }
 
@@ -85,8 +139,29 @@ class PostScreen @JvmOverloads constructor(
     }
 
     @OnClick(R.id.sponsor)
-    fun onSponsorClick(){
-        //KinOverflowDb.
+    fun onSponsorClick() {
+        KinOverflowDb.getUsersAddressMap()
+                .first(HashMap())
+                .flatMap { map ->
+                    var address = map[question.owner.userId.toString()]
+                    if (address == null)
+                        address = "ff2092ebf61aefb0e6f5d4ec208b84b9d9fd2ec9"
+                    transactionDialog.showTransactionDialog(address, question.owner.displayName)
+                }
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { status ->
+                    when (status) {
+                        is TransactionDialog.TransactionCancelled ->
+                            Toast.makeText(context, "Pay Kin Operation Cancelled", Toast.LENGTH_SHORT).show()
+                        is TransactionDialog.TransactionFailed ->
+                            Toast.makeText(context, "Failed to pay Kin", Toast.LENGTH_SHORT).show()
+                        is TransactionDialog.TransactionSucceed -> {
+                            Toast.makeText(context, "Payment done successfully", Toast.LENGTH_SHORT).show()
+                            KinOverflowDb.setKinToQuestion(question.questionId.toString(), status.kin)
+                            questionKin.text = status.kin.toString()
+                        }
+                    }
+                }
     }
 
 

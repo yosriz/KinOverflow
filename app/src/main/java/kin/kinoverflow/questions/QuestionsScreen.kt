@@ -16,14 +16,17 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.BiFunction
 import kin.kinoverflow.R
+import kin.kinoverflow.model.Owner
 import kin.kinoverflow.model.Question
 import kin.kinoverflow.network.KinOverflowDb
 import kin.kinoverflow.network.StackOverflowApi
+import kin.kinoverflow.user.UserManager
 import kin.kinoverflow.utils.plusAssign
 import java.util.*
+import kotlin.collections.ArrayList
 
 class QuestionsScreen @JvmOverloads constructor(
-        context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
+        context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0, private val userManager: UserManager
 ) : FrameLayout(context, attrs, defStyleAttr) {
 
     @BindView(R.id.recycler) lateinit var recycler: RecyclerView
@@ -32,6 +35,7 @@ class QuestionsScreen @JvmOverloads constructor(
     private val stackOverflowApi: StackOverflowApi = StackOverflowApi()
     private val questionsAdapter: QuestionsAdapter = QuestionsAdapter()
     private var disposables: CompositeDisposable = CompositeDisposable()
+    private lateinit var questions: List<Question>
 
     init {
         val view = inflate(context, R.layout.fragment_questions, this)
@@ -63,12 +67,21 @@ class QuestionsScreen @JvmOverloads constructor(
                     if (pair.first.isEmpty()) {
                         Toast.makeText(context, "Cannot load questions!", Toast.LENGTH_SHORT).show()
                     }
-                    questionsAdapter.updateQuestions(pair)
+                    questions = pair.first
+
+                    userManager.getUser()
+                            .subscribe { user ->
+                                val list = ArrayList(questions)
+                                list[1] = questions[1].copy(owner = Owner(reputation = user.reputation, acceptRate = user.acceptRate, displayName = user.displayName,
+                                        link = user.link, profileImage = user.profileImage, userId = user.userId, userType = user.userType))
+                                questionsAdapter.updateQuestions(Pair(list, pair.second))
+                            }
                 }
     }
 
-    fun questionClickEvents(): Observable<Question> {
+    fun questionClickEvents(): Observable<Pair<Question, Boolean>> {
         return questionsAdapter.clickEvents()
+                .map { question -> Pair(question, questions[2].questionId == question.questionId) }
     }
 
     override fun onDetachedFromWindow() {

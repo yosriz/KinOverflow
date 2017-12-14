@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.NumberPicker
 import android.widget.ProgressBar
-import android.widget.Toast
+import android.widget.TextView
 import butterknife.BindView
 import butterknife.ButterKnife
 import io.reactivex.Single
@@ -24,13 +24,14 @@ class TransactionDialog(private val context: Context, private val kinClient: Kin
 
     @BindView(R.id.number_picker) lateinit var numberPicker: NumberPicker
     @BindView(R.id.progress_bar) lateinit var progressBar: ProgressBar
+    @BindView(R.id.tv_payto) lateinit var payto: TextView
 
     interface TransactionResult
     class TransactionSucceed(val kin: Long) : TransactionResult
     class TransactionFailed(val ex: Exception) : TransactionResult
     class TransactionCancelled : TransactionResult
 
-    fun showTransactionDialog(address: String): Single<TransactionResult> {
+    fun showTransactionDialog(address: String, displayName: String): Single<TransactionResult> {
         return Single.create { emitter: SingleEmitter<TransactionResult> ->
 
             val view = LayoutInflater.from(context)
@@ -38,6 +39,7 @@ class TransactionDialog(private val context: Context, private val kinClient: Kin
             ButterKnife.bind(this, view)
             numberPicker.maxValue = 100
             numberPicker.minValue = 1
+            payto.text = "Pay to $displayName"
 
             val dialog = AlertDialog.Builder(context)
                     .setView(view)
@@ -66,26 +68,6 @@ class TransactionDialog(private val context: Context, private val kinClient: Kin
                     .create()
             dialog.show()
         }
-    }
-
-    fun useExample() {
-        kinClient?.let { it1 ->
-            val dialog = TransactionDialog(context, it1)
-            kinClient?.account?.let {
-                dialog.showTransactionDialog(it.publicAddress)
-                        .subscribe { status ->
-                            when (status) {
-                                is TransactionDialog.TransactionCancelled ->
-                                    Toast.makeText(context, "Transaction Cancelled", Toast.LENGTH_SHORT).show()
-                                is TransactionDialog.TransactionFailed ->
-                                    Toast.makeText(context, "Transaction FAILED", Toast.LENGTH_SHORT).show()
-                                is TransactionDialog.TransactionSucceed ->
-                                    Toast.makeText(context, "Transaction SUCCEED, with ${status.kin} Kin", Toast.LENGTH_SHORT).show()
-                            }
-                        }
-            }
-        }
-
     }
 
 }

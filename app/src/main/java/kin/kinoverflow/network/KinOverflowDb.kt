@@ -27,8 +27,9 @@ class KinOverflowDb {
             return getKinMap(KIN_PER_ANSWER_TABLE)
         }
 
-        fun getUsersAddressMap(): Flowable<Map<String, Long>> {
-            return getKinMap(USERS_ADDRESSES)
+        fun getUsersAddressMap(): Flowable<Map<String, String>> {
+            val kinDb = FirebaseDatabase.getInstance().getReference(USERS_ADDRESSES)
+            return RxFirebaseDatabase.observeValueEvent(kinDb, DataSnapshotMapper.mapOf(String::class.java))
         }
 
         private fun getKinMap(fromTable: String): Flowable<Map<String, Long>> {

@@ -42,7 +42,7 @@ class MainActivity : AppCompatActivity() {
                     }
                 }.subscribe()
 
-        questionsScreen = QuestionsScreen(this)
+        questionsScreen = QuestionsScreen(this, userManager = userManger)
         profileScreen = ProfileScreen(this, userManger = userManger)
         profileScreen.kinClient = kinClient
 
@@ -70,9 +70,22 @@ class MainActivity : AppCompatActivity() {
         screenHolder.removeAllViews()
         screenHolder.addView(questionsScreen)
         questionsScreen.questionClickEvents()
-                .subscribe { question ->
-                    screenHolder.removeAllViews()
-                    screenHolder.addView(PostScreen(this, question = question))
+                .subscribe { pair ->
+                    if (!pair.second) {
+                        screenHolder.removeAllViews()
+                        kinClient?.let {
+                            screenHolder.addView(PostScreen(this, question = pair.first, kinClient = it, answerFakedUser = null, userManager = userManger))
+                        }
+                    } else {
+                        screenHolder.removeAllViews()
+                        kinClient?.let {
+                            userManger.getOtherUser()
+                                    .subscribe { user ->
+                                        screenHolder.addView(PostScreen(this, question = pair.first, kinClient = it, answerFakedUser = user, userManager = userManger))
+                                    }
+
+                        }
+                    }
                 }
     }
 
