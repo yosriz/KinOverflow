@@ -12,12 +12,14 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import com.jakewharton.rxbinding2.support.v4.widget.RxSwipeRefreshLayout
 import io.reactivex.Observable
+import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.BiFunction
 import kin.kinoverflow.R
 import kin.kinoverflow.model.Owner
 import kin.kinoverflow.model.Question
+import kin.kinoverflow.model.User
 import kin.kinoverflow.network.KinOverflowDb
 import kin.kinoverflow.network.StackOverflowApi
 import kin.kinoverflow.user.UserManager
@@ -36,6 +38,7 @@ class QuestionsScreen @JvmOverloads constructor(
     private val questionsAdapter: QuestionsAdapter = QuestionsAdapter()
     private var disposables: CompositeDisposable = CompositeDisposable()
     private lateinit var questions: List<Question>
+    private lateinit var questionsObservable: Observable<List<Question>>
 
     init {
         val view = inflate(context, R.layout.fragment_questions, this)
@@ -47,12 +50,13 @@ class QuestionsScreen @JvmOverloads constructor(
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
 
+        questionsObservable = stackOverflowApi.getLastQuestions().toObservable().cache()
         disposables = CompositeDisposable()
         disposables += RxSwipeRefreshLayout.refreshes(pullToRefresh)
                 .startWith(Any())
                 .switchMap {
                     Observable.zip(
-                            stackOverflowApi.getLastQuestions().toObservable(),
+                            questionsObservable,
                             KinOverflowDb.getKinPerQuestionMap().toObservable(),
                             BiFunction { list: List<Question>, map: Map<String, Long> -> Pair(list, map) }
                     )
@@ -69,11 +73,21 @@ class QuestionsScreen @JvmOverloads constructor(
                     }
                     questions = pair.first
 
-                    userManager.getUser()
-                            .subscribe { user ->
+                    Single.zip(
+                            userManager.getUser(),
+                            userManager.getOtherUser(),
+                            BiFunction { user: User, otherUser: User ->
+                                Pair(user, otherUser)
+                            })
+                            .subscribe { usersPair ->
+                                val user = usersPair.first
+                                val otherUser = usersPair.second
                                 val list = ArrayList(questions)
                                 list[1] = questions[1].copy(owner = Owner(reputation = user.reputation, acceptRate = user.acceptRate, displayName = user.displayName,
                                         link = user.link, profileImage = user.profileImage, userId = user.userId, userType = user.userType))
+                                list[3] = questions[3].copy(owner = Owner(reputation = otherUser.reputation, acceptRate = otherUser.acceptRate, displayName = otherUser.displayName,
+                                        link = otherUser.link, profileImage = otherUser.profileImage, userId = otherUser.userId, userType = otherUser.userType))
+
                                 questionsAdapter.updateQuestions(Pair(list, pair.second))
                             }
                 }
