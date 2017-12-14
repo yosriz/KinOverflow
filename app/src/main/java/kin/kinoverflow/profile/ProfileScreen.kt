@@ -73,7 +73,7 @@ class ProfileScreen @JvmOverloads constructor(
 
     private fun refreshBalanceText() {
         if (kinClient != null) {
-            request = kinClient?.account?.balance
+            request = kinClient?.account?.pendingBalance
             request?.run(object : ResultCallback<Balance> {
                 override fun onResult(balance: Balance) {
                     kinBalance.text = balance.value(0)
