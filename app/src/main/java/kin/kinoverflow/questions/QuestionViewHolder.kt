@@ -5,6 +5,7 @@ import android.text.format.DateUtils
 import android.view.View
 import android.widget.TextView
 import butterknife.BindView
+import butterknife.BindViews
 import butterknife.ButterKnife
 import com.github.curioustechizen.ago.RelativeTimeTextView
 import io.reactivex.subjects.PublishSubject
@@ -18,7 +19,8 @@ class QuestionViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     @BindView(R.id.tv_title) lateinit var title: TextView
     @BindView(R.id.tv_votes_counter) lateinit var votesCounter: TextView
     @BindView(R.id.tv_kin) lateinit var kinCounter: TextView
-
+    @BindView(R.id.kin_icon) lateinit var kinIcon: View
+    @BindView(R.id.rectangle_kin) lateinit var kinRect: View
 
     init {
         ButterKnife.bind(this, itemView)
@@ -36,7 +38,16 @@ class QuestionViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         })
         title.text = question.title
         votesCounter.text = (question.upVoteCount - question.downVoteCount).toString()
-        kin?.let { kinCounter.text = it.toString() }
+        if (kin != null) {
+            kinCounter.text = kin.toString()
+            kinCounter.visibility = View.VISIBLE
+            kinIcon.visibility = View.VISIBLE
+            kinRect.visibility = View.VISIBLE
+        } else {
+            kinCounter.visibility = View.GONE
+            kinIcon.visibility = View.GONE
+            kinRect.visibility = View.GONE
+        }
     }
 
 }
