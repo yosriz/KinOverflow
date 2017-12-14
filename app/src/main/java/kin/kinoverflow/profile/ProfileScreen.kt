@@ -4,14 +4,13 @@ import android.content.Context
 import android.support.constraint.ConstraintLayout
 import android.util.AttributeSet
 import android.widget.FrameLayout
+import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import butterknife.BindView
 import butterknife.ButterKnife
-import io.reactivex.disposables.CompositeDisposable
-import kin.kinoverflow.PASSPHRASE
+import com.squareup.picasso.Picasso
 import kin.kinoverflow.R
-import kin.kinoverflow.transaction.TransactionDialog
+import kin.kinoverflow.model.User
 import kin.kinoverflow.user.UserManager
 import kin.sdk.core.Balance
 import kin.sdk.core.KinClient
@@ -23,7 +22,15 @@ class ProfileScreen @JvmOverloads constructor(
         context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0, private val userManger: UserManager = UserManager(context)
 ) : ConstraintLayout(context, attrs, defStyleAttr) {
 
-    @BindView(R.id.kin_balance) lateinit var kinBalance: TextView
+    @BindView(R.id.prof_kin_balance) lateinit var kinBalance: TextView
+    @BindView(R.id.prof_bronze_badge_count) lateinit var bronzeBadgeCount: TextView
+    @BindView(R.id.prof_silver_badge_count) lateinit var silverBadgeCount: TextView
+    @BindView(R.id.prof_gold_badge_count) lateinit var goldBadgeCount: TextView
+    @BindView(R.id.prof_user_about) lateinit var aboutUser: TextView
+    @BindView(R.id.prof_user_image) lateinit var userProfileImage: ImageView
+    @BindView(R.id.prof_user_id) lateinit var userId: TextView
+    @BindView(R.id.prof_reputation) lateinit var reputation: TextView
+
     var kinClient: KinClient? = null
     private var request: Request<Balance>? = null
 
@@ -40,8 +47,20 @@ class ProfileScreen @JvmOverloads constructor(
 
         userManger.getUser()
                 .subscribe {
-                    user -> //update user details
+                    user -> updateUserDetails(user)
                 }
+    }
+
+    private fun updateUserDetails(user: User){
+        bronzeBadgeCount.text = user.badgeCounts.bronze.toString()
+        silverBadgeCount.text = user.badgeCounts.silver.toString()
+        goldBadgeCount.text = user.badgeCounts.gold.toString()
+      //  aboutUser.text = user.aboutMe
+        Picasso.with(userProfileImage.context)
+                .load(user.profileImage)
+                .into(userProfileImage)
+        userId.text = user.displayName
+        reputation.text = user.reputation.toString()
     }
 
     override fun onDetachedFromWindow() {
@@ -57,7 +76,7 @@ class ProfileScreen @JvmOverloads constructor(
             request = kinClient?.account?.balance
             request?.run(object : ResultCallback<Balance> {
                 override fun onResult(balance: Balance) {
-                    kinBalance.setText(balance.value(0) + " KIN")
+                    kinBalance.text = balance.value(0)
                 }
 
                 override fun onError(e: Exception) {

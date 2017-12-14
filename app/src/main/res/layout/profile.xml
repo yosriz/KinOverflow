@@ -1,39 +1,116 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
-    android:paddingLeft="20dp"
+    android:paddingTop="20dp"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal">
 
 
     <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@android:drawable/sym_def_app_icon"/>
+        android:id="@+id/prof_user_image"
+        android:layout_width="86dp"
+        android:layout_height="86dp" />
 
     <TextView
-        android:id="@+id/userid"
+        android:id="@+id/prof_user_id"
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
+        android:layout_marginTop="5dp"
+        android:textSize="20sp"
+        android:fontFamily=""
+        android:text="yosriz"/>
+
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingLeft="15dp"
-        android:inputType="textPersonName"
-        android:text="yosriz" />
+        android:layout_marginTop="5dp"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/prof_reputation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:textSize="18sp"
+            android:text="5034"/>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_gravity="center"
+            android:paddingTop="2dp"
+            android:src="@drawable/circle_gold" />
+        <TextView
+            android:id="@+id/prof_gold_badge_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="2dp"
+            android:textSize="18sp"
+            android:text="2"/>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:paddingTop="2dp"
+            android:layout_gravity="center"
+            android:src="@drawable/circle_silver" />
+        <TextView
+            android:id="@+id/prof_silver_badge_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="2dp"
+            android:textSize="18sp"
+            android:text="1"/>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_gravity="center"
+            android:paddingTop="2dp"
+            android:src="@drawable/circle_bronze" />
+        <TextView
+            android:id="@+id/prof_bronze_badge_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="2dp"
+            android:textSize="18sp"
+            android:text="1"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="24dp"
+        android:layout_marginTop="5dp"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/prof_kin_balance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#005fff"
+            android:layout_gravity="center"
+            android:textSize="16sp"
+            android:text="53231"/>
+
+        <ImageView
+            android:layout_marginLeft="2dp"
+            android:src="@drawable/kin_icon"
+            android:layout_width="14dp"
+            android:layout_height="14dp"
+            android:layout_gravity="center"
+            />
+    </LinearLayout>
 
     <TextView
-        android:id="@+id/kin_balance"
-        android:layout_width="wrap_content"
+        android:id="@+id/prof_user_about"
         android:layout_height="wrap_content"
-        android:paddingLeft="15dp"
-        android:text="0 KIN"/>
+        android:layout_width="wrap_content"
+        android:layout_marginTop="15dp"
+        android:textSize="16sp"
+        android:paddingLeft="31dp"
+        android:paddingRight="66dp"
+        android:text="Hello, this is a description about me. I don't know why we get an empty user about me from the stackoverflow api. This is why all users have the same text here unfortunately. A bug to be fixed!"/>
 
-    <!--<TextView-->
-        <!--android:id="@+id/points"-->
-        <!--android:layout_width="86dp"-->
-        <!--android:layout_height="19dp"-->
-        <!--android:gravity="left|center_vertical|start"-->
-        <!--android:text="5034"-->
-        <!--tools:layout_editor_absoluteX="105dp"-->
-        <!--tools:layout_editor_absoluteY="211dp"/>-->
 </LinearLayout>
