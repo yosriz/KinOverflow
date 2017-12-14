@@ -1,16 +1,17 @@
 package kin.kinoverflow.post
 
 import android.support.v7.widget.RecyclerView
+import android.text.format.DateUtils
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.OnClick
+import com.github.curioustechizen.ago.RelativeTimeTextView
 import com.squareup.picasso.Picasso
 import kin.kinoverflow.R
 import kin.kinoverflow.model.Answer
-import kin.kinoverflow.model.Question
 import kin.kinoverflow.questions.ViewHolderClickListener
 
 class AnswerViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -20,7 +21,7 @@ class AnswerViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     @BindView(R.id.tv_votes) lateinit var votesCounter: TextView
     @BindView(R.id.tv_kin) lateinit var kinCounter: TextView
 
-    @BindView(R.id.tv_asked_date) lateinit var date: TextView
+    @BindView(R.id.tv_asked_date) lateinit var date: RelativeTimeTextView
     @BindView(R.id.profile_image) lateinit var profileImage: ImageView
     @BindView(R.id.tv_user_name) lateinit var profileName: TextView
     @BindView(R.id.tv_badges_count) lateinit var profileBadgesCount: TextView
@@ -32,7 +33,7 @@ class AnswerViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     }
 
     fun setAnswer(answer: Answer, kin: Long?) {
-        date.text = answer.creationDate.toString()
+        date.setReferenceTime(answer.creationDate * DateUtils.SECOND_IN_MILLIS)
         answerBody.text = answer.body
         votesCounter.text = (answer.upVoteCount - answer.downVoteCount).toString()
         kin?.let { kinCounter.text = it.toString() }

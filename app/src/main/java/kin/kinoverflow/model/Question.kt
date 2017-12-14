@@ -14,7 +14,7 @@ data class Question(
         @SerializedName("answer_count") val answerCount: Int = 0,
         @SerializedName("score") val score: Int = 0,
         @SerializedName("last_activity_date") val lastActivityDate: Int = 0,
-        @SerializedName("creation_date") val creationDate: Int = 0,
+        @SerializedName("creation_date") val creationDate: Long = 0,
         @SerializedName("last_edit_date") val lastEditDate: Int = 0,
         @SerializedName("question_id") val questionId: Int = 0,
         @SerializedName("link") val link: String = "",

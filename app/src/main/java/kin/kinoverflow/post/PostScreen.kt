@@ -3,6 +3,7 @@ package kin.kinoverflow.post
 import android.content.Context
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.text.format.DateUtils
 import android.util.AttributeSet
 import android.widget.FrameLayout
 import android.widget.ImageView
@@ -11,6 +12,7 @@ import android.widget.Toast
 import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.OnClick
+import com.github.curioustechizen.ago.RelativeTimeTextView
 import com.squareup.picasso.Picasso
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -41,7 +43,7 @@ class PostScreen @JvmOverloads constructor(
     @BindView(R.id.tv_title) lateinit var questiontitle: TextView
     @BindView(R.id.tv_votes) lateinit var questionVotes: TextView
     @BindView(R.id.tv_tags) lateinit var questionTags: TextView
-    @BindView(R.id.tv_asked_date) lateinit var questionDate: TextView
+    @BindView(R.id.tv_asked_date) lateinit var questionDate: RelativeTimeTextView
     @BindView(R.id.profile_image) lateinit var questionProfileImage: ImageView
     @BindView(R.id.tv_user_name) lateinit var questionProfileName: TextView
     @BindView(R.id.tv_badges_count) lateinit var questionProfileBadgesCount: TextView
@@ -129,7 +131,7 @@ class PostScreen @JvmOverloads constructor(
         questionTags.text = question.tags.reduce(operation = { tags, tag ->
             return@reduce "$tags, $tag"
         })
-        questionDate.text = question.creationDate.toString()
+        questionDate.setReferenceTime(question.creationDate * DateUtils.SECOND_IN_MILLIS)
         questionProfileName.text = question.owner.displayName
         if (!question.owner.link.isEmpty()) {
             Picasso.with(context)
