@@ -16,7 +16,7 @@ class UserManager(private val context: Context) {
     init {
         val sharedPref = context.getSharedPreferences("settings", Context.MODE_PRIVATE)
         userId = sharedPref.getInt("user_id", 3903847) //default is yosriz profile
-        val fakedUserId = sharedPref.getInt("faked_user_id", 22656) //default is JonSkeet profile
+        val fakedUserId = sharedPref.getInt("faked_user_id", 9113876) //default is berryve profile
         cachedUser = api.getUserDetails(userId)
                 .cache()
 
